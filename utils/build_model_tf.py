@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import *
 
-def MLP_extractor(hidden_units = [256, 256], activation = 'relu', dropout_rate = 0.3, input_shape = (500, 500, 3)):
+def MLP(hidden_units = [256, 256], activation = 'relu', dropout_rate = 0.3, input_shape = (500, 500, 3)):
     global model
     
     inputs = tf.keras.layers.Input(shape = input_shape)
@@ -49,13 +49,73 @@ def convnet_extractor(conv_model = None, input_shape = (500, 500, 3)):
     
     model.summary()
 
-def make_model_branch(branch_num = 3, branch_same = True, hidden_units = [256, 256, 1], activation = 'relu', dropout_rate=0.3, model = model):
+def convnet_1D_extractor(conv_model = 'vanilla', hidden_units = [256, 256], activation = 'relu', dropout_rate = 0.3, input_shape = (500, 3)):
+    global model
+    
+    inputs = tf.keras.layers.Input(shape = input_shape)
+    
+    if conv_model == 'vanilla':
+        for a, units in enumerate(hudden_units):
+            if a == 0:
+                model = tf.keras.layers.Conv1D(units, )(inputs) ### 커널 사이즈
+                model = tf.keras.layers.BatchNormalization()(model)
+                model = tf.keras.layers.Activation(activation)(model)
+            else:
+                model = tf.keras.layers.Conv1D(units, )(model) ### 커널 사이즈
+                model = tf.keras.layers.BatchNormalization()(model)
+                model = tf.keras.layers.Activation(activation)(model)
+                
+    elif conv_model == 'unet':
+        model = tf.keras.layers.Conv1D(32, 3, strides=2, padding='same')(inputs)
+        model = layers.BatchNormalization()(model)
+        model = layers.Activation('relu')(model)
+        
+        previous_block_activation = model
+        
+        for filters in [64, 128, 256]:
+            model = layers.Activation('relu')(model)
+            model = layers.SeparableConv1D(filters, 3, padding='same')(model)
+            model = layers.BatchNormalization()(model)
+            
+            model = layers.Activation('relu')(model)
+            model = layers.SeparableConv1D(filters, 3, padding='same')(model)
+            model = layers.BatchNormalization()(model)
+            
+            model = layers.MaxPooling1D(3, strides=2, padding='same')(model)
+            
+            residual = layers.Conv1D(filters, 1, strides=2, padding='same')(previous_block_activation)
+            model = layers.add([model, residual])
+            previous_block_activation = model
+        
+        for filters in [256, 128, 64, 32]:
+            model = layers.Activation('relu')(model)
+            model = layers.Conv1DTranspose(filters, 3, padding='same')(model)
+            model = layers.BatchNormalization()(model)
+            
+            model = layers.Activation('relu')(model)
+            model = layers.Conv1DTranspose(filters, 3, padding='same')(model)
+            model = layers.BatchNormalization()(model)
+            
+            model = layers.UpSampling1D(2)(model)
+            
+            residual = layers.UpSampling1D(2)(previous_block_activation)
+            residual = layers.Conv1D(filters, 1, padding='same')(residual)
+            model = layers.add([model, residual])
+        
+    else:
+        pass
+        
+    model = tf.keras.models.Model(inputs = inputs, outputs=model)
+    model.summary()
+
+def make_model_branch(branch_same = True, hidden_units = [256, 256, 1], activation = 'relu', dropout_rate=0.3, model = model):
     global model_new
     x_ = model.output
+    x_ = tf.keras.layers.Flatten()(x_)
     
     if branch_same == True:
         output_list = []
-        for branch in range(branch_num):
+        for branch in range(len(hidden_units)):
             for layers_len, units in enumerate(hidden_units):
                 if layers_len == 0:
                     globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dense(units, activation=activation)(x_)
