@@ -1,3 +1,6 @@
+
+from tensorflow.keras.applications import *
+
 def MLP_extractor(hidden_units = [256, 256], activation = 'relu', dropout_rate = 0.3, input_shape = (500, 500, 3)):
     global model
     
