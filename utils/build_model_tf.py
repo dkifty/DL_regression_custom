@@ -1,4 +1,4 @@
-def make_model_branch(branch_num = 3, branch_name = False, branch_same = True, hidden_units = [256, 256, 1], activation = 'relu', dropout=0.3, model = model):
+def make_model_branch(branch_num = 3, branch_same = True, hidden_units = [256, 256, 1], activation = 'relu', dropout=0.3, model = model):
     global model_new
     x_ = model.output
     
