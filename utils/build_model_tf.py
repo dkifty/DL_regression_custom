@@ -1,4 +1,4 @@
-def MLP(hidden_units = [256, 256], activation = 'relu', dropout_rate = 0.3, input_shape = (500, 500, 3)):
+def MLP_extractor(hidden_units = [256, 256], activation = 'relu', dropout_rate = 0.3, input_shape = (500, 500, 3)):
     global model
     
     inputs = tf.keras.layers.Input(shape = input_shape)
