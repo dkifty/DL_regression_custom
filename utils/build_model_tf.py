@@ -49,6 +49,38 @@ def convnet_extractor(conv_model = None, input_shape = (500, 500, 3)):
     
     model.summary()
 
+def convnet_extractor(conv_model = None, input_shape = (500, 500, 3)):
+    global model
+    
+    if conv_model == None:
+        print('conv_model could be...')
+        print('')
+    elif 'vgg' in conv_model:
+        model = tf.keras.applications.vgg19.VGG19(include_top = False, weights = None, input_shape=input_shape)
+        model.trainable = True
+    elif 'resnet' in conv_model:
+        model = tf.keras.applications.resnet50.ResNet50(include_top = False, weights = None, input_shape=input_shape)
+        model.trainable = True
+    elif 'efficientnet' in conv_model:
+        model = tf.keras.applications.efficientnet.EfficientNetB1(include_top = False, weights = None, input_shape=input_shape)
+        model.trainable = True
+    elif 'xception' in conv_model:
+        model = tf.keras.applications.xception.Xception(include_top = False, weights = None, input_shape=input_shape)
+        model.trainable = True
+    elif 'mobilenet' in conv_model:
+        model = tf.keras.applications.mobilenet.MobileNet(include_top = False, weights = None, input_shape=input_shape)
+        model.trainable = True
+    elif 'densenet' in conv_model:
+        model = tf.keras.applications.densenet.DenseNet201(include_top = False, weights = None, input_shape=input_shape)
+        model.trainable = True
+    elif 'inception' in conv_model:
+        model = tf.keras.applications.inception_v3.InceptionV3(include_top = False, weights = None, input_shape=input_shape)
+        model.trainable = True
+    else:
+        pass
+    
+    model.summary()
+
 def make_model_branch(branch_num = 3, branch_same = True, hidden_units = [256, 256, 1], activation = 'relu', dropout_rate=0.3, model = model):
     global model_new
     x_ = model.output
