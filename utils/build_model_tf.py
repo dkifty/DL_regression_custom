@@ -1,5 +1,8 @@
 
 from tensorflow.keras.applications import *
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import *
 
 def MLP_extractor(hidden_units = [256, 256], activation = 'relu', dropout_rate = 0.3, input_shape = (500, 500, 3)):
     global model
@@ -54,3 +57,4 @@ def make_model_branch(branch_num = 3, branch_same = True, hidden_units = [256, 2
             output_list.append(globals()['x_{}'.format(str(branch))])
         model_new = tf.keras.models.Model(inputs=model.input, outputs=output_list)
         model_new.summary()
+## branch에서 regression task일때, classification task일때 나누기
