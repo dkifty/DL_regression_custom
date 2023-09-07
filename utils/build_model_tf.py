@@ -1,3 +1,16 @@
+def MLP(hidden_units = [256, 256], activation = 'relu', dropout_rate = 0.3, input_shape = (500, 500, 3)):
+    global model
+    
+    inputs = tf.keras.layers.Input(shape = input_shape)
+    model = tf.keras.layers.Flatten()(inputs)
+    
+    for units in hidden_units:
+        model = tf.keras.layers.Dense(units, activation = activation)(model)
+        model = tf.keras.layers.Dropout(dropout_rate)(model)
+        
+    model = tf.keras.models.Model(inputs=inputs, outputs=model)
+    model.summary()
+
 def make_model_branch(branch_num = 3, branch_same = True, hidden_units = [256, 256, 1], activation = 'relu', dropout_rate=0.3, model = model):
     global model_new
     x_ = model.output
