@@ -1,4 +1,4 @@
-def make_model_branch(branch_num = 3, branch_same = True, hidden_units = [256, 256, 1], activation = 'relu', dropout=0.3, model = model):
+def make_model_branch(branch_num = 3, branch_same = True, hidden_units = [256, 256, 1], activation = 'relu', dropout_rate=0.3, model = model):
     global model_new
     x_ = model.output
     
@@ -8,10 +8,10 @@ def make_model_branch(branch_num = 3, branch_same = True, hidden_units = [256, 2
             for layers_len, units in enumerate(hidden_units):
                 if layers_len == 0:
                     globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dense(units, activation=activation)(x_)
-                    globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dropout(dropout)(globals()['x_{}'.format(str(branch))])
+                    globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dropout(dropout_rate)(globals()['x_{}'.format(str(branch))])
                 elif layers_len < len(hidden_units)-1 and layers_len != 0:
                     globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dense(units, activation=activation)(globals()['x_{}'.format(str(branch))])
-                    globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dropout(dropout)(globals()['x_{}'.format(str(branch))])
+                    globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dropout(dropout_rate)(globals()['x_{}'.format(str(branch))])
                 else:
                     globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dense(units, activation='linear')(globals()['x_{}'.format(str(branch))])
                     print('x_',str(branch))
@@ -29,10 +29,10 @@ def make_model_branch(branch_num = 3, branch_same = True, hidden_units = [256, 2
                 print('x_', branch)
                 if layers_len == 0:
                     globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dense(layers, activation=activation)(x_)
-                    globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dropout(dropout)(globals()['x_{}'.format(str(branch))])
+                    globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dropout(dropout_rate)(globals()['x_{}'.format(str(branch))])
                 elif layers_len < len(units)-1 and layers_len != 0:
                     globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dense(layers, activation=activation)(globals()['x_{}'.format(str(branch))])
-                    globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dropout(dropout)(globals()['x_{}'.format(str(branch))])
+                    globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dropout(dropout_rate)(globals()['x_{}'.format(str(branch))])
                 else:
                     globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dense(layers, activation='linear')(globals()['x_{}'.format(str(branch))])
             output_list.append(globals()['x_{}'.format(str(branch))])
