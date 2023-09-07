@@ -36,5 +36,5 @@ def make_model_branch(branch_num = 3, branch_same = True, hidden_units = [256, 2
                 else:
                     globals()['x_{}'.format(str(branch))] = tf.keras.layers.Dense(layers, activation='linear')(globals()['x_{}'.format(str(branch))])
             output_list.append(globals()['x_{}'.format(str(branch))])
-        model_new = Model(inputs=model.input, outputs=output_list)
+        model_new = tf.keras.models.Model(inputs=model.input, outputs=output_list)
         model_new.summary()
