@@ -11,8 +11,6 @@ def vgg_block(inputs, num_cnn=3, filters=64):
     return model
 
 def vgg(model_name = 'vgg16', input_shape = (500, 500, 3)):
-    global model
-    
     inputs = tf.keras.layers.Input(shape = input_shape)
     model = inputs
     
@@ -44,6 +42,5 @@ def vgg(model_name = 'vgg16', input_shape = (500, 500, 3)):
         pass    
     
     model = tf.keras.models.Model(inputs=inputs, outputs=model)
-    model.summary()
-
-    return model
+    
+    return model, model.summary()
