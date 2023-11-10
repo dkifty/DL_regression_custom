@@ -1,3 +1,4 @@
+# vit
 def mlp(x, hidden_units, dropout_rate):
     for units in hidden_units:
         x = layers.Dense(units, activation=tf.nn.gelu)(x)
@@ -36,10 +37,7 @@ class PatchEncoder(layers.Layer):
         encoded = self.projection(patch) + self.position_embedding(positions)
         return encoded
 
-def vit(model_name='vit', input_shape=(500,500,3), patch_size=50, projection_dim=50, transformer_layers=8, num_heads=4):
-    num_patches = (input_shape[0] // patch_size) ** 2
-    transformer_units = [projection_dim * 2, projection_dim,]
-    
+def vit(model_name='vit', input_shape=input_shape, patch_size=patch_size, projection_dim=projection_dim, transformer_layers=transformer_layers, num_heads=num_heads):
     inputs = tf.keras.layers.Input(shape = input_shape)
     model = inputs
     
