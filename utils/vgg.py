@@ -45,3 +45,5 @@ def vgg(model_name = 'vgg16', input_shape = (500, 500, 3)):
     
     model = tf.keras.models.Model(inputs=inputs, outputs=model)
     model.summary()
+
+    return model
