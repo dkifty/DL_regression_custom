@@ -5,11 +5,7 @@ def mlp(x, hidden_units, dropout_rate):
     return x
 
 class ShiftedPatchTokenization(layers.Layer):
-    def __init__(
-        self,
-        vanilla=False,
-        **kwargs,
-    ):
+    def __init__(self, vanilla=False, **kwargs,):
         super().__init__(**kwargs)
         self.vanilla = vanilla
         self.image_size = image_size
@@ -93,9 +89,7 @@ class PatchEncoder(layers.Layer):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.num_patches = num_patches
-        self.position_embedding = layers.Embedding(
-            input_dim=num_patches, output_dim=projection_dim
-        )
+        self.position_embedding = layers.Embedding(input_dim=num_patches, output_dim=projection_dim)
         self.positions = tf.range(start=0, limit=self.num_patches, delta=1)
 
     def call(self, encoded_patches):
@@ -113,12 +107,8 @@ class MultiHeadAttentionLSA(tf.keras.layers.MultiHeadAttention):
         query = tf.multiply(query, 1.0 / self.tau)
         attention_scores = tf.einsum(self._dot_product_equation, key, query)
         attention_scores = self._masked_softmax(attention_scores, attention_mask)
-        attention_scores_dropout = self._dropout_layer(
-            attention_scores, training=training
-        )
-        attention_output = tf.einsum(
-            self._combine_equation, attention_scores_dropout, value
-        )
+        attention_scores_dropout = self._dropout_layer(attention_scores, training=training)
+        attention_output = tf.einsum(self._combine_equation, attention_scores_dropout, value)
         return attention_output, attention_scores
 
 def vits(model_name='vits', input_shape=input_shape, patch_size=patch_size, projection_dim=projection_dim, transformer_layers=transformer_layers, num_heads=num_heads, vanilla=False):
