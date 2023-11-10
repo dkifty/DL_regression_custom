@@ -1,4 +1,4 @@
-def densenet_block(blocks):
+def densenet_block(model, blocks):
     for i in range(blocks):
         model = densenet_block_(model, rate=32)
     return model
@@ -45,13 +45,13 @@ def densenet(model_name='densenet', input_shape=(500,500,3)):
     elif model_name == 'densenet169':
         blocks = [6, 12, 32, 32]
     
-    model = densenet_block(blocks[0])
+    model = densenet_block(model, blocks[0])
     model = transition_block(model, reduction=0.5)
-    model = densenet_block(blocks[1])
+    model = densenet_block(model, blocks[1])
     model = transition_block(model, reduction=0.5)
-    model = densenet_block(blocks[2])
+    model = densenet_block(model, blocks[2])
     model = transition_block(model, reduction=0.5)
-    model = densenet_block(blocks[3])
+    model = densenet_block(model, blocks[3])
     
     model = tf.keras.layers.BatchNormalization()(model)
     model = tf.keras.layers.ReLU()(model)
