@@ -1,4 +1,3 @@
-from tensorflow.keras.applications import *
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import *
