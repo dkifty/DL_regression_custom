@@ -5,7 +5,7 @@ def mlp(x, hidden_units, dropout_rate):
         x = layers.Dropout(dropout_rate)(x)
     return x
 
-class Patches(layers.Layer):
+class Patches(tf.keras.layers.Layer):
     def __init__(self, patch_size):
         super().__init__()
         self.patch_size = patch_size
@@ -23,7 +23,7 @@ class Patches(layers.Layer):
         patches = tf.reshape(patches, [batch_size, -1, patch_dims])
         return patches
     
-class PatchEncoder(layers.Layer):
+class PatchEncoder(tf.keras.layers.Layer):
     def __init__(self, num_patches, projection_dim):
         super().__init__()
         self.num_patches = num_patches
