@@ -37,7 +37,7 @@ class PatchEncoder(tf.keras.layers.Layer):
         encoded = self.projection(patch) + self.position_embedding(positions)
         return encoded
 
-def vit(model_name='vit', input_shape=input_shape, patch_size=patch_size, projection_dim=projection_dim, transformer_layers=transformer_layers, num_heads=num_heads):
+def vit(input_shape, patch_size=25, projection_dim=50, transformer_layers=8, num_heads=4):
     inputs = tf.keras.layers.Input(shape = input_shape)
     model = inputs
     
