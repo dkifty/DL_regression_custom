@@ -4,7 +4,7 @@ def mlp(x, hidden_units, dropout_rate):
         x = tf.keras.layers.Dropout(dropout_rate)(x)
     return x
 
-class ShiftedPatchTokenization(layers.Layer):
+class ShiftedPatchTokenization(tf.keras.layers.Layer):
     def __init__(self, vanilla=False, **kwargs,):
         super().__init__(**kwargs)
         self.vanilla = vanilla
@@ -85,7 +85,7 @@ def make_diag(num_patches):
     diag_attn_mask = tf.cast([diag_attn_mask], dtype=tf.int8)
     return diag_attn_mask
 
-class PatchEncoder(layers.Layer):
+class PatchEncoder(tf.keras.layers.Layer):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.num_patches = num_patches
