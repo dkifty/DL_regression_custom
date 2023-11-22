@@ -224,3 +224,17 @@ def mlp(x, hidden_units, dropout_rate):
         x = tf.keras.layers.Dropout(dropout_rate)(x)
     return x
 
+def swin(input_shape, patch_size=(25,25), dropout_rate=0.2, num_heads=8, embed_dim=64, num_mlp=256, mlp_head_units=[2048,1024], qkv_bias=True, window_size=2, shift_size=1, ):
+    num_patch_x = input_shape[0] // patch_size[0]
+    num_patch_y = input_shape[1] // patch_size[1]
+    
+    inputs = tf.keras.layers.Input(shape = input_shape)
+    
+    model = PatchExtract(patch_size)(inputs)
+    model = PatchEmbedding(num_patch_x * num_patch_y, embed_dim)(model)
+    model = SwinTransformer(dim = embed_dim, num_patch=(num_patch_x, num_patch_y), num_heads = num_heads, window_size = window_size, shift_size = 0, num_mlp = num_mlp, qkv_bias = qkv_bias, dropout_rate = dropout_rate, )(model)
+    model = SwinTransformer(dim = embed_dim, num_patch=(num_patch_x, num_patch_y), num_heads = num_heads, window_size = window_size, shift_size = shift_size, num_mlp = num_mlp, qkv_bias = qkv_bias, dropout_rate = dropout_rate, )(model)
+    model = PatchMerging((num_patch_x, num_patch_y), embed_dim = embed_dim)(model)
+    
+    model = tf.keras.models.Model(inputs=inputs, outputs=model)
+    return model, model.summary()
